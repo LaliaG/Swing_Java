@@ -32,6 +32,9 @@ public class Calculator extends JPanel implements ActionListener {
         display = new JTextField();
         display.setFont(new Font("Arial", Font.BOLD, 36));
         display.setHorizontalAlignment(JTextField.RIGHT);
+        display.setEditable(false);
+        display.setBackground(Color.BLACK);
+        display.setForeground(Color.WHITE);
         gbc.gridwidth = 4;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -45,31 +48,78 @@ public class Calculator extends JPanel implements ActionListener {
                 "0", ".", "="
         };
 
+        Color[] buttonColors = {
+                new Color(128, 128, 128), // gray for functions like C, +/-, %
+                new Color(255, 165, 0),   // orange for operators
+                new Color(192, 192, 192)  // light gray for numbers and dot
+        };
+
         int row = 1;
         int col = 0;
 
-        for (String label : buttonLabels) {
-            JButton button = new JButton(label);
-            button.setFont(new Font("Arial", Font.PLAIN, 24));
-            button.addActionListener(this);
-            gbc.gridwidth = (label.equals("0")) ? 2 : 1;
-            gbc.gridx = col;
-            gbc.gridy = row;
-            add(button, gbc);
+        for (String rowLabelArray : buttonLabels) {
+            //for (String label : rowLabelArray) {
+              JButton button = createRoundButton(rowLabelArray);
+              if ("0123456789.".contains(rowLabelArray)) {
+                    button.setBackground(buttonColors[2]);
+                    button.setForeground(Color.BLACK);
+              } else if ("+-*/=".contains(rowLabelArray)) {
+                    button.setBackground(buttonColors[1]);
+                    button.setForeground(Color.WHITE);
+              } else {
+                    button.setBackground(buttonColors[0]);
+                    button.setForeground(Color.WHITE);
+              }
+              button.setFont(new Font("Arial", Font.PLAIN, 24));
+              button.addActionListener(this);
+              gbc.gridwidth = (rowLabelArray.equals("0")) ? 2 : 1;
+              gbc.gridx = col;
+              gbc.gridy = row;
+              add(button, gbc);
 
-            col += gbc.gridwidth;
-            if (col > 3) {
-                col = 0;
-                row++;
-            }
+              col += gbc.gridwidth;
+              if (col > 3) {
+                 col = 0;
+                 row++;
+              }
+
         }
+    }
+
+    // Helper method to create round buttons
+    private JButton createRoundButton(String label) {
+        JButton button = new JButton(label) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillOval(0, 0, getWidth(), getHeight());
+                super.paintComponent(g);
+            }
+
+            @Override
+            protected void paintBorder(Graphics g) {
+                g.setColor(getForeground());
+                g.drawOval(0, 0, getWidth() - 1, getHeight() - 1);
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width = size.height = Math.max(size.width, size.height);
+                return size;
+            }
+        };
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setOpaque(false);
+        return button;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
-        // Si le bouton "=" est pressé, effectuez le calcul
+        // If "=" button is pressed, perform the calculation
         if (command.equals("=")) {
             double operand2 = Double.parseDouble(display.getText());
 
@@ -87,7 +137,7 @@ public class Calculator extends JPanel implements ActionListener {
                     if (operand2 != 0) {
                         operand1 = operand1 / operand2;
                     } else {
-                        display.setText("Error"); // Division par zéro
+                        display.setText("Error"); // Division by zero
                         isNewOperation = true;
                         return;
                     }
@@ -97,20 +147,20 @@ public class Calculator extends JPanel implements ActionListener {
             display.setText(String.valueOf(operand1));
             isNewOperation = true;
 
-            // Si un opérateur est pressé, enregistrez le premier opérande et l'opérateur
+            // If an operator is pressed, save the first operand and the operator
         } else if ("+-*/".contains(command)) {
             operator = command;
             operand1 = Double.parseDouble(display.getText());
             isNewOperation = true;
 
-            // Si le bouton "C" est pressé, réinitialisez tout
+            // If "C" is pressed, reset everything
         } else if (command.equals("C")) {
             display.setText("");
             operator = "";
             operand1 = 0;
             isNewOperation = true;
 
-            // Sinon, ajoutez les chiffres au display
+            // If any other button is pressed (numbers and dot)
         } else {
             if (isNewOperation) {
                 display.setText(command);
@@ -119,6 +169,7 @@ public class Calculator extends JPanel implements ActionListener {
                 display.setText(display.getText() + command);
             }
         }
+    }
 
 
         /*switch (command) {
@@ -153,8 +204,8 @@ public class Calculator extends JPanel implements ActionListener {
             return Double.parseDouble(engine.eval(expression).toString());
         } catch (Exception e) {
             throw new RuntimeException("Invalid expression");
-        }*/
-    }
+        }
+    }*/
 
 
 }
