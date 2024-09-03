@@ -18,6 +18,9 @@ import java.awt.Font;
 public class Calculator extends JPanel implements ActionListener {
 
     private JTextField display;
+    private String operator = "";
+    private double operand1 = 0;
+    private boolean isNewOperation = true;
 
     public Calculator() {
         setLayout(new GridBagLayout());
@@ -65,7 +68,60 @@ public class Calculator extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        switch (command) {
+
+        // Si le bouton "=" est pressé, effectuez le calcul
+        if (command.equals("=")) {
+            double operand2 = Double.parseDouble(display.getText());
+
+            switch (operator) {
+                case "+":
+                    operand1 = operand1 + operand2;
+                    break;
+                case "-":
+                    operand1 = operand1 - operand2;
+                    break;
+                case "*":
+                    operand1 = operand1 * operand2;
+                    break;
+                case "/":
+                    if (operand2 != 0) {
+                        operand1 = operand1 / operand2;
+                    } else {
+                        display.setText("Error"); // Division par zéro
+                        isNewOperation = true;
+                        return;
+                    }
+                    break;
+            }
+
+            display.setText(String.valueOf(operand1));
+            isNewOperation = true;
+
+            // Si un opérateur est pressé, enregistrez le premier opérande et l'opérateur
+        } else if ("+-*/".contains(command)) {
+            operator = command;
+            operand1 = Double.parseDouble(display.getText());
+            isNewOperation = true;
+
+            // Si le bouton "C" est pressé, réinitialisez tout
+        } else if (command.equals("C")) {
+            display.setText("");
+            operator = "";
+            operand1 = 0;
+            isNewOperation = true;
+
+            // Sinon, ajoutez les chiffres au display
+        } else {
+            if (isNewOperation) {
+                display.setText(command);
+                isNewOperation = false;
+            } else {
+                display.setText(display.getText() + command);
+            }
+        }
+
+
+        /*switch (command) {
             case "C":
                 display.setText("");
                 break;
@@ -97,7 +153,7 @@ public class Calculator extends JPanel implements ActionListener {
             return Double.parseDouble(engine.eval(expression).toString());
         } catch (Exception e) {
             throw new RuntimeException("Invalid expression");
-        }
+        }*/
     }
 
 
