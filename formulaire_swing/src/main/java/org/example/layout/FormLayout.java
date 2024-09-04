@@ -22,48 +22,48 @@ public class FormLayout extends JFrame{
         // Initialisation des composants
         mainPanel = new JPanel(new BorderLayout());
         formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajouter des marges
+        formPanel.setBorder(BorderFactory.createTitledBorder("Formulaire d'ajout"));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5); // Espacement entre les composants
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST; // Aligné à gauche
 
-        // Titre du formulaire
+        /*// Titre du formulaire
         JLabel formTitle = new JLabel("Formulaire d'ajout");
         formTitle.setFont(new Font("Arial", Font.BOLD, 16));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Étendre sur deux colonnes pour un alignement uniforme
-        formPanel.add(formTitle, gbc);
+        formPanel.add(formTitle, gbc);*/
 
         // Panneau du nom
         JLabel labelName = new JLabel("Nom :");
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
+        gbc.gridy = 0;
+        //gbc.gridwidth = 1;
         formPanel.add(labelName, gbc);
 
         JTextField inputName = new JTextField(20);
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 0;
         formPanel.add(inputName, gbc);
 
         // Panneau de l'email
         JLabel labelEmail = new JLabel("Email :");
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         formPanel.add(labelEmail, gbc);
 
         JTextField inputEmail = new JTextField(20);
         gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         formPanel.add(inputEmail, gbc);
 
         // Panneau du genre
         JLabel labelGender = new JLabel("Genre :");
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         formPanel.add(labelGender, gbc);
 
         JRadioButton radioButtonH = new JRadioButton("Homme");
@@ -78,13 +78,13 @@ public class FormLayout extends JFrame{
         genderPanel.add(radioButtonF);
 
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         formPanel.add(genderPanel, gbc);
 
         // Bouton de validation
         validateButton = new JButton("Ajouter");
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         formPanel.add(validateButton, gbc);
@@ -115,6 +115,7 @@ public class FormLayout extends JFrame{
 
         // Panneau pour le tableau des données
         JPanel tablePanel = new JPanel(new BorderLayout());
+        //tablePanel.setBorder(BorderFactory.createTitledBorder("Tableau des données"));
 
         // Titre du tableau
         JLabel tableTitle = new JLabel("Tableau des données");
@@ -162,6 +163,7 @@ public class FormLayout extends JFrame{
 
         // Ajouter le panneau principal à la fenêtre
         this.getContentPane().add(mainPanel);
+        this.setTitle("Complex Two Panel Example");
         this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
