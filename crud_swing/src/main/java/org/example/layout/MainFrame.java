@@ -1,11 +1,15 @@
 package org.example.layout;
 
+import org.example.dao.PersonDAO;
 import org.example.layout.dialog.DeleteDialog;
+import org.example.layout.dialog.InsertDialog;
 import org.example.layout.dialog.SelectDialog;
 import org.example.layout.dialog.UpdateDialog;
 import org.example.model.Person;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
