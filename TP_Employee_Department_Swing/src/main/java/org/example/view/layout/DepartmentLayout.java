@@ -116,15 +116,15 @@ public class DepartmentLayout extends JFrame {
         table = new JTable(departmentTableModel);
     }
 
+    public JPanel getContentPanel() {
+        return contentPanel; // Correction ici
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             DepartmentDAO departmentDAO = new DepartmentDAO();
             DepartmentLayout departmentLayout = new DepartmentLayout(departmentDAO);
             departmentLayout.setVisible(true);
         });
-    }
-
-    public Component getContentPanel() {
-        return null;
     }
 }

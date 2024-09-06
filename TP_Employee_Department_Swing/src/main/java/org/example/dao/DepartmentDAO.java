@@ -13,7 +13,7 @@ public class DepartmentDAO implements IBaseDAO<Department>{
     private Transaction transaction;
 
     public DepartmentDAO() {
-        this.session = ConnexionDb.getSessionFactory().openSession();
+        this.session = ConnexionDb.getSession();
     }
 
     private void beginTransaction() {
@@ -39,8 +39,11 @@ public class DepartmentDAO implements IBaseDAO<Department>{
     @Override
     public List<Department> getAll() {
         try {
+            beginTransaction(); // Ajout de la transaction
             String hql = "FROM Department";
-            return session.createQuery(hql, Department.class).getResultList();
+            List<Department> result = session.createQuery(hql, Department.class).getResultList();
+            commitTransaction(); // Validation de la transaction
+            return result;
         } catch (Exception e) {
             rollbackTransaction();
             throw new RuntimeException(e);
@@ -50,7 +53,10 @@ public class DepartmentDAO implements IBaseDAO<Department>{
     @Override
     public Department findById(int id) {
         try {
-            return session.get(Department.class, id);
+            beginTransaction();
+            Department department = session.get(Department.class, id);
+            commitTransaction();
+            return department;
         } catch (Exception e) {
             rollbackTransaction();
             throw new RuntimeException(e);
@@ -104,10 +110,13 @@ public class DepartmentDAO implements IBaseDAO<Department>{
 
     public Department getDepartmentByName(String name) {
         try {
+            beginTransaction();
             String hql = "FROM Department WHERE name = :name";
-            return session.createQuery(hql, Department.class)
+            Department department = session.createQuery(hql, Department.class)
                     .setParameter("name", name)
                     .uniqueResult();
+            commitTransaction();
+            return department;
         } catch (Exception e) {
             rollbackTransaction();
             throw new RuntimeException(e);
