@@ -1,30 +1,132 @@
 package org.example.layout;
 
 import org.example.dao.PersonDAO;
-import org.example.layout.dialog.DeleteDialog;
 import org.example.layout.dialog.InsertDialog;
-import org.example.layout.dialog.SelectDialog;
 import org.example.layout.dialog.UpdateDialog;
-import org.example.model.Person;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class MainFrame extends JFrame {
 
-    private DefaultTableModel tableModel;
+    private JButton btnInsert, btnUpdate, btnDelete, btnSelect;
+    private PersonDAO personDAO;
+
+    public MainFrame(Object person) {
+        setTitle("Main Frame");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 200);
+        setLocationRelativeTo(null);
+
+        // Initialisation du DAO
+        personDAO = new PersonDAO();
+
+        // Création du panel pour les boutons
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2, 10, 10));
+
+        // Boutons
+        btnInsert = new JButton("Insert");
+        btnUpdate = new JButton("Update");
+        btnDelete = new JButton("Delete");
+        btnSelect = new JButton("Select");
+
+        // Ajout des boutons au panel
+        panel.add(btnInsert);
+        panel.add(btnUpdate);
+        panel.add(btnDelete);
+        panel.add(btnSelect);
+
+        // Ajout du panel au frame
+        add(panel);
+
+        // Action listeners pour les boutons
+        btnInsert.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                InsertDialog insertDialog = new InsertDialog(MainFrame.this, personDAO, person);
+                insertDialog.setVisible(true);
+            }
+        });
+
+        btnUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int personId = getSelectedPersonId();
+                if (personId != -1) {
+                    UpdateDialog updateDialog = new UpdateDialog(MainFrame.this, personDAO, personId);
+                    updateDialog.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Please select a person first.");
+                }
+            }
+        });
+
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int personId = getSelectedPersonId();
+                if (personId != -1) {
+                    int confirm = JOptionPane.showConfirmDialog(MainFrame.this, "Are you sure to delete?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        personDAO.deletePerson((long) personId);
+                        // Rafraîchir la table ou une autre action après suppression
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Please select a person first.");
+                }
+            }
+        });
+
+        btnSelect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Implémenter la logique de sélection (affichage des données, etc.)
+                JOptionPane.showMessageDialog(MainFrame.this, "Select action clicked.");
+            }
+        });
+    }
+
+    public MainFrame() {
+
+    }
+
+    private int getSelectedPersonId() {
+        // Simuler une sélection dans une liste ou table
+        // Retourner -1 si aucune personne n'est sélectionnée, ou retourner l'ID de la personne sélectionnée
+        return -1; // À mettre à jour selon votre logique
+    }
+
+    public static void main(String[] args, Object person) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new MainFrame(person).setVisible(true);
+            }
+        });
+    }
+
+  /*  private JButton btnInsert, btnUpdate, btnDelete, btnSelect;
+    private PersonDAO personDAO;
+
+   /* private DefaultTableModel tableModel;
     private JTable table;
     private PersonDAO personDAO = new PersonDAO();
 
     public MainFrame() {
         setTitle("Main Frame");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(400, 200);
         setLocationRelativeTo(null);
+
+        // Initialisation du DAO
+        personDAO = new PersonDAO();
+
+        // Création du panel pour les boutons
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2, 10, 10));
 
         // Créer les boutons
         JButton insertButton = new JButton("Insert");
@@ -97,5 +199,5 @@ public class MainFrame extends JFrame {
 
     public static void main(String[] args) {
         new MainFrame();
-    }
+    }*/
 }

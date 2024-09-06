@@ -1,5 +1,6 @@
 package org.example.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,27 +8,26 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "persons")
-public class Person {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
+    private String firstname;
+    private String lastname;
 
-    @Column(name = "name")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Column(name = "number")
-    private String number;
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 
-    public Person(String name, String number) {
-    }
 
-    public Person(Person person) {
-    }
 }

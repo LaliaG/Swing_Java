@@ -73,4 +73,7 @@ public class UpdateDialog extends JDialog {
             dispose();
         }
     }
+
+    public UpdateDialog(MainFrame parent, PersonDAO personDAO, int personId) {
+    }
 }

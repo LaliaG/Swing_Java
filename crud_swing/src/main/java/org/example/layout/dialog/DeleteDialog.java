@@ -17,7 +17,8 @@ public class DeleteDialog extends JDialog {
 
         int selectedRow = table.getSelectedRow();
         if (selectedRow >= 0) {
-            setLayout(new GridLayout(3, 2, 10, 10));
+            setLayout(new
+                    GridLayout(3, 2, 10, 10));
 
             Long id = (Long) tableModel.getValueAt(selectedRow, 0);
             Person person = personDAO.getPersonById(id);
@@ -41,7 +42,7 @@ public class DeleteDialog extends JDialog {
             deleteButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    personDAO.deletePerson(person);
+                    personDAO.deletePerson(person.getId());
                     tableModel.removeRow(selectedRow);
                     JOptionPane.showMessageDialog(parent, "Person deleted successfully!");
                     dispose();

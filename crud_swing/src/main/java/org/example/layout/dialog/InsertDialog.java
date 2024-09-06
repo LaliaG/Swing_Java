@@ -4,14 +4,68 @@ import org.example.dao.PersonDAO;
 import org.example.model.Person;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class InsertDialog extends JDialog {
 
-    public InsertDialog(Frame parent, PersonDAO personDAO, DefaultTableModel tableModel) {
+    private JTextField nameField, numberField;
+    private JButton btnAdd, btnCancel;
+    private PersonDAO personDAO;
+
+    public InsertDialog(JFrame parent, PersonDAO personDAO, Object person) {
+        super(parent, "Add Person", true);
+        this.personDAO = personDAO;
+
+        setLayout(new GridLayout(3, 2, 10, 10));
+
+        // Champ de texte pour le nom
+        add(new JLabel("Name:"));
+        nameField = new JTextField();
+        add(nameField);
+
+        // Champ de texte pour le numéro
+        add(new JLabel("Number:"));
+        numberField = new JTextField();
+        add(numberField);
+
+        // Boutons
+        btnAdd = new JButton("Add");
+        btnCancel = new JButton("Cancel");
+
+        add(btnAdd);
+        add(btnCancel);
+
+        // Action sur le bouton Add
+        btnAdd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String number = numberField.getText();
+
+                // Ajout de la personne via le DAO
+                personDAO.savePerson(person);
+                new Person(new Person(name, number));
+
+                // Fermer le dialogue après l'ajout
+                dispose();
+            }
+        });
+
+        // Action sur le bouton Cancel
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+
+        setSize(300, 150);
+        setLocationRelativeTo(parent);
+    }
+
+   /* public InsertDialog(Frame parent, PersonDAO personDAO) {
         super(parent, "Insert Contact Details", true);
         setLayout(new GridLayout(3, 2, 10, 10));
 
@@ -61,5 +115,5 @@ public class InsertDialog extends JDialog {
 
         pack();
         setLocationRelativeTo(parent);
-    }
+    }*/
 }
